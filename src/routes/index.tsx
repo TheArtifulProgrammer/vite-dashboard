@@ -5,12 +5,18 @@ import Dashboard from "@/pages/Dashboard";
 import Orders from "@/pages/Orders";
 import Products from "@/pages/Products";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-
+import { Login } from "@/pages/Login";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 const router = createBrowserRouter([
+  { path: "/login", element: <Login /> },
   {
     path: "/",
-    element: <DashboardLayout />,
+    element: (
+      <ProtectedRoute>
+        <DashboardLayout />
+      </ProtectedRoute>
+    ),
     children: [
       { index: true, element: <Dashboard /> },
       { path: "orders", element: <Orders /> },

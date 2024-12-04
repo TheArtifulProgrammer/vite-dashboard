@@ -19,9 +19,18 @@ import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { ModeToggle } from "@/components/ui/mode-toggle";
 import AdminSearch from "./AdminSearch";
 import MobileNavigation from "./MobileNavigation";
+import { toast } from "sonner";
+import useAuth from "@/hooks/useAuth";
 
 export default function Header() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  
+    const { logout } = useAuth();
+
+    const handleLogout = () => {
+      logout();
+      toast.success("Logged out successfully!");
+    };
 
   return (
     <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
@@ -64,7 +73,7 @@ export default function Header() {
           <DropdownMenuItem>Settings</DropdownMenuItem>
           <DropdownMenuItem>Support</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Logout</DropdownMenuItem>
+          <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </header>
