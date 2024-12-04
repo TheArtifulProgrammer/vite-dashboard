@@ -1,10 +1,10 @@
-import Dashboard from "./app/dashboard/page";
+import AppRoutes from "./routes";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 
 function App() {
   return (
     <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
-      <Dashboard />
+      <AppRoutes />
     </ThemeProvider>
   );
 }
