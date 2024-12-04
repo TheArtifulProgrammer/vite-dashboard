@@ -1,12 +1,12 @@
-import './App.css'
+import Dashboard from "./app/dashboard/page";
+import { ThemeProvider } from "@/components/ui/theme-provider";
 
 function App() {
-
   return (
-   <>
-   Hi Goats
-   </>
-  )
+    <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
+      <Dashboard />
+    </ThemeProvider>
+  );
 }
 
-export default App
+export default App;
