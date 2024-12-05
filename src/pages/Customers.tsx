@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { DataTable } from "@/components/Datatable";
+import { DataTable } from "@/components/DataTable";
 
 const data: Payment[] = [
   {
