@@ -19,6 +19,8 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
+  DropdownMenuRadioItem,
+  DropdownMenuRadioGroup,
 } from "@/components/ui/dropdown-menu";
 import {
   Table,
@@ -31,6 +33,8 @@ import {
 
 import { ChevronDown } from "lucide-react";
 
+// PAGE SIZE OPTIONS
+const PAGE_SIZE_OPTIONS = [5, 10, 25, 50, 100];
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
@@ -51,6 +55,7 @@ export function DataTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
+  const [currentPageSize, setCurrentPageSize] = useState(pageSize);
 
   // Create table instance
   const table = useReactTable({
@@ -69,10 +74,9 @@ export function DataTable<TData, TValue>({
       columnFilters,
       columnVisibility,
       rowSelection,
-    },
-    initialState: {
       pagination: {
-        pageSize,
+        pageSize: currentPageSize,
+        pageIndex: 0, // Reset to first page when page size changes
       },
     },
   });
@@ -96,7 +100,7 @@ export function DataTable<TData, TValue>({
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
-              Columns <ChevronDown />
+              Column Visibility <ChevronDown />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -168,29 +172,57 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
 
-      {/* Pagination Section */}
-      <div className="flex items-center justify-end space-x-2 py-4">
+      {/* Pagination and Page Size Section */}
+      <div className="flex items-center justify-between space-x-2 py-4">
+        {/* Selected Rows Information */}
         <div className="flex-1 text-sm text-muted-foreground">
           {table.getFilteredSelectedRowModel().rows.length} of{" "}
           {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>
-        <div className="space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
+
+        {/* Pagination Controls */}
+        <div className="flex items-center space-x-4">
+          {/* Page Size Dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm">
+                {currentPageSize} rows per page
+                <ChevronDown className="ml-2 h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuRadioGroup
+                value={currentPageSize.toString()}
+                onValueChange={(value) => setCurrentPageSize(Number(value))}
+              >
+                {PAGE_SIZE_OPTIONS.map((size) => (
+                  <DropdownMenuRadioItem key={size} value={size.toString()}>
+                    {size} rows
+                  </DropdownMenuRadioItem>
+                ))}
+              </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {/* Previous and Next Buttons */}
+          <div className="space-x-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+            >
+              Previous
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+            >
+              Next
+            </Button>
+          </div>
         </div>
       </div>
     </div>
